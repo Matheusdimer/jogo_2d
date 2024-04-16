@@ -7,6 +7,8 @@ using UnityEngine.Serialization;
 
 public class NewBehaviourScript : MonoBehaviour
 {
+    private static readonly int Destruir = Animator.StringToHash("destruir");
+    
     [SerializeField]
     private float jumpForce;
     
@@ -19,10 +21,11 @@ public class NewBehaviourScript : MonoBehaviour
     [SerializeField]
     private SpriteRenderer sprite;
 
-    [SerializeField] private GameController gameController;
+    [SerializeField]
+    private GameController gameController;
 
     private bool _isGrounded = false;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,8 +62,13 @@ public class NewBehaviourScript : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        // TODO colisões com frutas e inimigos
+        if (other.gameObject.CompareTag("Coin"))
+        {
+            other.gameObject.GetComponent<Animator>().SetBool(Destruir, true);
+            Destroy(other.gameObject, 1f);
+            gameController.AddScore();
+        }
     }
 }
