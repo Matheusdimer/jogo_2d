@@ -79028,7 +79028,7 @@ MonoBehaviour:
   playerSpeed: 4
   rdb: {fileID: 1083896810}
   sprite: {fileID: 1083896808}
-  gameController: {fileID: 0}
+  gameController: {fileID: 129544268}
   animator: {fileID: 1083896813}
 --- !u!95 &1083896813
 Animator:
