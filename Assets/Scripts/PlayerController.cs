@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    private static readonly int Destruir = Animator.StringToHash("destruir");
+    private static readonly int coletado = Animator.StringToHash("coletado");
     
     [SerializeField]
     private float jumpForce;
@@ -24,6 +24,9 @@ public class NewBehaviourScript : MonoBehaviour
     [SerializeField]
     private GameController gameController;
 
+    [SerializeField]
+    private Animator animator;
+
     private bool _isGrounded = false;
 
     // Start is called before the first frame update
@@ -36,13 +39,19 @@ public class NewBehaviourScript : MonoBehaviour
     void Update()
     {
         var horizontal = Input.GetAxis("Horizontal");
+
         
-        transform.Translate(new Vector3(horizontal, 0, 0) * (Time.deltaTime * playerSpeed));
         
         if (horizontal != 0)
         {
+            animator.SetBool("wallking", true);
             sprite.flipX = horizontal < 0;
+        } else
+        {
+            animator.SetBool("wallking", false);
         }
+
+        transform.Translate(new Vector3(horizontal, 0, 0) * (Time.deltaTime * playerSpeed));
 
         if (_isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
@@ -66,7 +75,7 @@ public class NewBehaviourScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Coin"))
         {
-            other.gameObject.GetComponent<Animator>().SetBool(Destruir, true);
+            other.gameObject.GetComponent<Animator>().SetBool(coletado, true);
             Destroy(other.gameObject, 1f);
             gameController.AddScore();
         }
