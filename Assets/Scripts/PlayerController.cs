@@ -8,6 +8,7 @@ using UnityEngine.Serialization;
 public class NewBehaviourScript : MonoBehaviour
 {
     private static readonly int coletado = Animator.StringToHash("coletado");
+    private static readonly int wallking = Animator.StringToHash("wallking");
     
     [SerializeField]
     private float jumpForce;
@@ -44,11 +45,11 @@ public class NewBehaviourScript : MonoBehaviour
         
         if (horizontal != 0)
         {
-            animator.SetBool("wallking", true);
+            animator.SetBool(wallking, true);
             sprite.flipX = horizontal < 0;
         } else
         {
-            animator.SetBool("wallking", false);
+            animator.SetBool(wallking, false);
         }
 
         transform.Translate(new Vector3(horizontal, 0, 0) * (Time.deltaTime * playerSpeed));
