@@ -32,10 +32,13 @@ public class NewBehaviourScript : MonoBehaviour
 
     private Vector3 _spawn;
 
+    private Renderer _renderer;
+
     // Start is called before the first frame update
     void Start()
     {
         _spawn = transform.position;
+        _renderer = GetComponent<Renderer>();
     }
 
     // Update is called once per frame
@@ -85,9 +88,18 @@ public class NewBehaviourScript : MonoBehaviour
                 Destroy(this);
                 return;
             }
-            
-            transform.position = _spawn;
+
+            StartCoroutine(Respawn());
         }
+    }
+
+    IEnumerator Respawn()
+    {
+        _renderer.enabled = false;
+        yield return new WaitForSeconds(2f);
+        
+        transform.position = _spawn;
+        _renderer.enabled = true;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
