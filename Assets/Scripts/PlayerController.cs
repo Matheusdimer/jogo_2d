@@ -30,10 +30,12 @@ public class NewBehaviourScript : MonoBehaviour
 
     private bool _isGrounded = false;
 
+    private Vector3 _spawn;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        _spawn = transform.position;
     }
 
     // Update is called once per frame
@@ -69,6 +71,22 @@ public class NewBehaviourScript : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground")) {
             _isGrounded = true;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            var dead = gameController.Death();
+
+            if (dead)
+            {
+                Destroy(this);
+                return;
+            }
+            
+            transform.position = _spawn;
         }
     }
 
