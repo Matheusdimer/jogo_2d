@@ -29,6 +29,7 @@ public class NewBehaviourScript : MonoBehaviour
     private Animator animator;
 
     private bool _isGrounded = false;
+    private bool _isDying = false;
 
     private Vector3 _spawn;
 
@@ -44,24 +45,24 @@ public class NewBehaviourScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var horizontal = Input.GetAxis("Horizontal");
+        if (!_isDying) {
+            var horizontal = Input.GetAxis("Horizontal");
+            
+            if (horizontal != 0)
+            {
+                animator.SetBool(wallking, true);
+                sprite.flipX = horizontal < 0;
+            } else
+            {
+                animator.SetBool(wallking, false);
+            }
 
-        
-        
-        if (horizontal != 0)
-        {
-            animator.SetBool(wallking, true);
-            sprite.flipX = horizontal < 0;
-        } else
-        {
-            animator.SetBool(wallking, false);
-        }
+            transform.Translate(new Vector3(horizontal, 0, 0) * (Time.deltaTime * playerSpeed));
 
-        transform.Translate(new Vector3(horizontal, 0, 0) * (Time.deltaTime * playerSpeed));
-
-        if (_isGrounded && Input.GetKeyDown(KeyCode.Space))
-        {
-            rdb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            if (_isGrounded && Input.GetKeyDown(KeyCode.Space))
+            {
+                rdb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            }
         }
     }
 
@@ -81,23 +82,21 @@ public class NewBehaviourScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            var dead = gameController.Death();
+            die();
+        }
 
-            if (dead)
-            {
-                Destroy(this);
-                return;
-            }
-
-            StartCoroutine(Respawn());
+        if (other.gameObject.CompareTag("DeadLine"))
+        {
+            die();
         }
     }
 
     IEnumerator Respawn()
     {
         _renderer.enabled = false;
+        _isDying = true;
         yield return new WaitForSeconds(2f);
-        
+        _isDying = false;
         transform.position = _spawn;
         _renderer.enabled = true;
     }
@@ -110,5 +109,18 @@ public class NewBehaviourScript : MonoBehaviour
             Destroy(other.gameObject, 1f);
             gameController.AddScore();
         }
+    }
+
+    private void die()
+    {
+        var dead = gameController.Death();
+
+        if (dead)
+        {
+            Destroy(this);
+            return;
+        }
+
+        StartCoroutine(Respawn());
     }
 }
