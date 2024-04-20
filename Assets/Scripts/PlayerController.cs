@@ -32,14 +32,17 @@ public class NewBehaviourScript : MonoBehaviour
     private bool _isDying = false;
 
     private Vector3 _spawn;
-
+    
     private Renderer _renderer;
+
+    private Collider2D _colider;
 
     // Start is called before the first frame update
     void Start()
     {
         _spawn = transform.position;
         _renderer = GetComponent<Renderer>();
+        _colider = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
@@ -68,12 +71,14 @@ public class NewBehaviourScript : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D other)
     {
+        animator.SetBool("jumping", true);
         _isGrounded = false;
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground")) {
+            animator.SetBool("jumping", false);
             _isGrounded = true;
         }
     }
@@ -109,12 +114,16 @@ public class NewBehaviourScript : MonoBehaviour
             Destroy(other.gameObject, 1f);
             gameController.AddScore();
         }
+        Debug.Log("Teste");
+        if (other.gameObject.CompareTag("Alavanca"))
+        {
+            gameController.pushAlavanca();
+        }
     }
 
     private void die()
     {
         var dead = gameController.Death();
-
         if (dead)
         {
             Destroy(this);

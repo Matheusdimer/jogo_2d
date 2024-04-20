@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using UnityEngine.Tilemaps;
 
 public class GameController : MonoBehaviour
 {
@@ -17,10 +18,17 @@ public class GameController : MonoBehaviour
     
     [SerializeField]
     private TextMeshProUGUI textVidas;
+
+    [SerializeField]
+    private Alavanca alavanca;
+
+    [SerializeField]
+    private TilemapRenderer tilemap;
     
     // Start is called before the first frame update
     void Start()
     {
+        tilemap.enabled = false;
         textVidas.text = "Vidas: " + lives;
     }
 
@@ -53,5 +61,11 @@ public class GameController : MonoBehaviour
     private void GameOver()
     {
         SceneManager.LoadScene("GameOver");
+    }
+
+    public void pushAlavanca()
+    {
+        alavanca.ChangeSprite();
+        tilemap.enabled = true;
     }
 }
