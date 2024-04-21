@@ -20,15 +20,11 @@ public class GameController : MonoBehaviour
     private TextMeshProUGUI textVidas;
 
     [SerializeField]
-    private Alavanca alavanca;
-
-    [SerializeField]
-    private TilemapRenderer tilemap;
+    private Alavanca alavancaScript;
     
     // Start is called before the first frame update
     void Start()
     {
-        tilemap.enabled = false;
         textVidas.text = "Vidas: " + lives;
     }
 
@@ -41,7 +37,11 @@ public class GameController : MonoBehaviour
     public void AddScore()
     {
         _score++;
-        textPontos.text = "Pontos: " + _score;
+        textPontos.text = "Pontos: " + _score + "/14";
+        if (_score >= 14)
+        { 
+            alavancaScript.Show(true);
+        }
     }
 
     public bool Death()
@@ -65,7 +65,17 @@ public class GameController : MonoBehaviour
 
     public void pushAlavanca()
     {
-        alavanca.ChangeSprite();
-        tilemap.enabled = true;
+        alavancaScript.ChangeSprite();
+    }
+
+    public void EndGame()
+    {
+        SceneManager.LoadScene("Fim");
+    }
+
+    public Vector3 Checkpoint(GameObject checkpoint)
+    {
+        checkpoint checkpointScript = checkpoint.GetComponent<checkpoint>();
+        return checkpointScript.Check();
     }
 }

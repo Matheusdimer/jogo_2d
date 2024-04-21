@@ -114,22 +114,32 @@ public class NewBehaviourScript : MonoBehaviour
             Destroy(other.gameObject, 1f);
             gameController.AddScore();
         }
-        Debug.Log("Teste");
         if (other.gameObject.CompareTag("Alavanca"))
         {
             gameController.pushAlavanca();
+        }
+        if (other.gameObject.CompareTag("EndGame"))
+        {
+            gameController.EndGame();
+        }
+        if (other.gameObject.CompareTag("CheckPoint"))
+        {
+            _spawn = gameController.Checkpoint(other.gameObject);
         }
     }
 
     private void die()
     {
-        var dead = gameController.Death();
-        if (dead)
+        if (!_isDying)
         {
-            Destroy(this);
-            return;
-        }
+            var dead = gameController.Death();
+            if (dead)
+            {
+                Destroy(this);
+                return;
+            }
 
-        StartCoroutine(Respawn());
+            StartCoroutine(Respawn());
+        }
     }
 }

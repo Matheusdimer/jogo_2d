@@ -1,24 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Alavanca : MonoBehaviour
 {
 
     [SerializeField]
-    private Sprite inactiveSprite;
-
-    [SerializeField]
     private Sprite activeSprite;
 
-    private SpriteRenderer spriteRenderer;
+    [SerializeField]
+    private TilemapRenderer tilemap;
 
-    private bool active = false;
+    private SpriteRenderer _spriteRenderer;
+
+    private Collider2D _colider;
+
+    private bool _active = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        tilemap.enabled = false;
+        _spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        _colider = GetComponent<Collider2D>();
+        Show(false);
     }
 
     // Update is called once per frame
@@ -28,10 +34,17 @@ public class Alavanca : MonoBehaviour
 
     public void ChangeSprite()
     {
-        if (!active)
+        if (!_active)
         {
-            active = true;
-            spriteRenderer.sprite = activeSprite;
+            _active = true;
+            _spriteRenderer.sprite = activeSprite;
+            tilemap.enabled = true;
         }
+    }
+
+    public void Show(bool show)
+    {
+        _spriteRenderer.enabled = show;
+        _colider.enabled = show;
     }
 }

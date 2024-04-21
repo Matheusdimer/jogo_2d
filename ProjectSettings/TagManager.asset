@@ -9,6 +9,8 @@ TagManager:
   - Enemy
   - DeadLine
   - Alavanca
+  - EndGame
+  - CheckPoint
   layers:
   - Default
   - TransparentFX
