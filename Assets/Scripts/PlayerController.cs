@@ -7,8 +7,9 @@ using UnityEngine.Serialization;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    private static readonly int coletado = Animator.StringToHash("coletado");
-    private static readonly int wallking = Animator.StringToHash("wallking");
+    private static readonly int Coletado = Animator.StringToHash("coletado");
+    private static readonly int Walking = Animator.StringToHash("walking");
+    private static readonly int Dying = Animator.StringToHash("dying");
     
     [SerializeField]
     private float jumpForce;
@@ -36,6 +37,7 @@ public class NewBehaviourScript : MonoBehaviour
     private Renderer _renderer;
 
     private Collider2D _colider;
+    private static readonly int Jumping = Animator.StringToHash("jumping");
 
     // Start is called before the first frame update
     void Start()
@@ -53,32 +55,38 @@ public class NewBehaviourScript : MonoBehaviour
             
             if (horizontal != 0)
             {
-                animator.SetBool(wallking, true);
+                animator.SetBool(Walking, true);
                 sprite.flipX = horizontal < 0;
             } else
             {
-                animator.SetBool(wallking, false);
+                animator.SetBool(Walking, false);
             }
 
             transform.Translate(new Vector3(horizontal, 0, 0) * (Time.deltaTime * playerSpeed));
 
             if (_isGrounded && Input.GetKeyDown(KeyCode.Space))
             {
-                rdb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+                Jump();
             }
         }
     }
 
+    private void Jump()
+    {
+        rdb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+    }
+
     private void OnCollisionExit2D(Collision2D other)
     {
-        animator.SetBool("jumping", true);
+        if (!_isDying) return;
+        animator.SetBool(Jumping, true);
         _isGrounded = false;
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground")) {
-            animator.SetBool("jumping", false);
+            animator.SetBool(Jumping, false);
             _isGrounded = true;
         }
     }
@@ -87,30 +95,35 @@ public class NewBehaviourScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            die();
+            Die();
         }
 
         if (other.gameObject.CompareTag("DeadLine"))
         {
-            die();
+            Die();
         }
     }
 
-    IEnumerator Respawn()
+    private IEnumerator Respawn()
     {
-        _renderer.enabled = false;
+        Jump();
+        animator.SetBool(Walking, false);
+        animator.SetBool(Jumping, false);
+        animator.SetBool(Dying, true);
+        _colider.enabled = false;       
         _isDying = true;
         yield return new WaitForSeconds(2f);
         _isDying = false;
+        _colider.enabled = true;
+        animator.SetBool(Dying, false);
         transform.position = _spawn;
-        _renderer.enabled = true;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Coin"))
         {
-            other.gameObject.GetComponent<Animator>().SetBool(coletado, true);
+            other.gameObject.GetComponent<Animator>().SetBool(Coletado, true);
             Destroy(other.gameObject, 1f);
             gameController.AddScore();
         }
@@ -128,7 +141,7 @@ public class NewBehaviourScript : MonoBehaviour
         }
     }
 
-    private void die()
+    private void Die()
     {
         if (!_isDying)
         {
