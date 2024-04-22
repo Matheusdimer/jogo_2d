@@ -63,7 +63,7 @@ public class GameController : MonoBehaviour
         SceneManager.LoadScene("GameOver");
     }
 
-    public void pushAlavanca()
+    public void PushAlavanca()
     {
         alavancaScript.ChangeSprite();
     }
@@ -75,7 +75,12 @@ public class GameController : MonoBehaviour
 
     public Vector3 Checkpoint(GameObject checkpoint)
     {
-        checkpoint checkpointScript = checkpoint.GetComponent<checkpoint>();
+        var checkpointScript = checkpoint.GetComponent<checkpoint>();
         return checkpointScript.Check();
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("Scenes/SampleScene");
     }
 }

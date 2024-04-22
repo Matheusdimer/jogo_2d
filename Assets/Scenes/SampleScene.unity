@@ -22677,7 +22677,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22659d9fb3c95e04586e621f1722a024, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 3.5
+  jumpForce: 3.6
   playerSpeed: 4
   rdb: {fileID: 1083896810}
   sprite: {fileID: 1083896808}

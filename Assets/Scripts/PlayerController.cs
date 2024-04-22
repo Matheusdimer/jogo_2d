@@ -78,7 +78,7 @@ public class NewBehaviourScript : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D other)
     {
-        if (!_isDying) return;
+        if (_isDying) return;
         animator.SetBool(Jumping, true);
         _isGrounded = false;
     }
@@ -129,7 +129,7 @@ public class NewBehaviourScript : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Alavanca"))
         {
-            gameController.pushAlavanca();
+            gameController.PushAlavanca();
         }
         if (other.gameObject.CompareTag("EndGame"))
         {
