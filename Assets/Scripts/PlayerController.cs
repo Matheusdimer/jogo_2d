@@ -1,15 +1,12 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class NewBehaviourScript : MonoBehaviour
 {
     private static readonly int Coletado = Animator.StringToHash("coletado");
     private static readonly int Walking = Animator.StringToHash("walking");
     private static readonly int Dying = Animator.StringToHash("dying");
+    private static readonly int Jumping = Animator.StringToHash("jumping");
     
     [SerializeField]
     private float jumpForce;
@@ -36,15 +33,14 @@ public class NewBehaviourScript : MonoBehaviour
     
     private Renderer _renderer;
 
-    private Collider2D _colider;
-    private static readonly int Jumping = Animator.StringToHash("jumping");
+    private Collider2D _collider;
 
     // Start is called before the first frame update
     void Start()
     {
         _spawn = transform.position;
         _renderer = GetComponent<Renderer>();
-        _colider = GetComponent<Collider2D>();
+        _collider = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
@@ -110,11 +106,11 @@ public class NewBehaviourScript : MonoBehaviour
         animator.SetBool(Walking, false);
         animator.SetBool(Jumping, false);
         animator.SetBool(Dying, true);
-        _colider.enabled = false;       
+        _collider.enabled = false;       
         _isDying = true;
         yield return new WaitForSeconds(2f);
         _isDying = false;
-        _colider.enabled = true;
+        _collider.enabled = true;
         animator.SetBool(Dying, false);
         transform.position = _spawn;
     }

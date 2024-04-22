@@ -25,7 +25,10 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        textVidas.text = "Vidas: " + lives;
+        if (textVidas != null)
+        {
+            textVidas.text = "Vidas: " + lives;
+        }
     }
 
     // Update is called once per frame
