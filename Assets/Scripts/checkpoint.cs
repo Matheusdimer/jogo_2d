@@ -26,6 +26,6 @@ public class checkpoint : MonoBehaviour
     public Vector3 Check()
     {
         _bandeiraRenderer.enabled = true;
-        return new Vector3(transform.position.x, transform.position.y + 0.500f, transform.position.y);
+        return new Vector3(transform.position.x, transform.position.y + 1f, transform.position.y);
     }
 }
