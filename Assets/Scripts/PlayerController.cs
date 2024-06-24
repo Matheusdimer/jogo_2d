@@ -124,6 +124,7 @@ public class GamePlayer : MonoBehaviour
         if (other.gameObject.CompareTag("Coin"))
         {
             other.gameObject.GetComponent<Animator>().SetBool(Coletado, true);
+            other.enabled = false;
             Destroy(other.gameObject, 1f);
             gameController.AddScore();
         }
