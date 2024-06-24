@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class GamePlayer : MonoBehaviour
 {
     private static readonly int Coletado = Animator.StringToHash("coletado");
     private static readonly int Walking = Animator.StringToHash("walking");
@@ -35,6 +35,7 @@ public class NewBehaviourScript : MonoBehaviour
 
     private Collider2D _collider;
 
+    public FixedJoystick joystick;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +48,7 @@ public class NewBehaviourScript : MonoBehaviour
     void Update()
     {
         if (!_isDying) {
-            var horizontal = Input.GetAxis("Horizontal");
+            var horizontal = joystick.Horizontal;
             
             if (horizontal != 0)
             {
@@ -60,16 +61,19 @@ public class NewBehaviourScript : MonoBehaviour
 
             transform.Translate(new Vector3(horizontal, 0, 0) * (Time.deltaTime * playerSpeed));
 
-            if (_isGrounded && Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 Jump();
             }
         }
     }
 
-    private void Jump()
+    public void Jump()
     {
-        rdb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+        if (_isGrounded)
+        {
+            rdb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+        }
     }
 
     private void OnCollisionExit2D(Collision2D other)
